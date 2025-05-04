@@ -2,7 +2,7 @@ package com.ruyomi.dev.utils.rex.file
 
 import android.annotation.SuppressLint
 import android.content.Context
-import com.ruyomi.dev.utils.rex.file.utils.RootUtil
+import com.ruyomi.dev.utils.rex.file.utils.ShellUtil
 import com.ruyomi.dev.utils.rex.file.utils.ShizukuUtil
 
 enum class RexFileModel {
@@ -37,7 +37,7 @@ class RexFileConfig {
             if (ShizukuUtil.peekService() && ShizukuUtil.hasPermission()) {
                 ShizukuUtil.unbindService()
             }
-            RootUtil.exit()
+            ShellUtil.exit()
             ShizukuUtil.removeRequestPermissionResultListener()
         }
     }

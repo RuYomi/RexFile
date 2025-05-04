@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.ruyomi.dev.utils.rex.file"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24

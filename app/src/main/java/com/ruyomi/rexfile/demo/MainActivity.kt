@@ -2,6 +2,7 @@ package com.ruyomi.rexfile.demo
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -39,6 +40,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.ruyomi.dev.utils.rex.file.RexFileConfig
 import com.ruyomi.dev.utils.rex.file.RexFileModel
+import com.ruyomi.dev.utils.rex.file.chmod
 import com.ruyomi.dev.utils.rex.file.file
 import com.ruyomi.dev.utils.rex.file.hasAllFilePermission
 import com.ruyomi.dev.utils.rex.file.hasDocPermission
@@ -164,6 +166,13 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
+
+                if (peekShizukuService()) {
+                    file("Android/data/com.tencent.tmgp.pubgmhd/files/UE4Game/ShadowTrackerExtra/ShadowTrackerExtra/Saved/Paks/avatarpaks").chmod(
+                        "777"
+                    ).apply { Log.d("TAG", this.toString()) }
+                }
+
                 LaunchedEffect(key1 = path) {
                     if (hasStoragePermission() && hasAllFilePermission()) {
                         list.clear()

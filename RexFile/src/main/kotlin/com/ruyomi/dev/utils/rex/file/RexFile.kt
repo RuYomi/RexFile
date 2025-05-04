@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Environment
 import android.os.ParcelFileDescriptor
 import android.provider.Settings
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,7 +20,7 @@ import com.ruyomi.dev.utils.rex.file.impl.DocFile
 import com.ruyomi.dev.utils.rex.file.impl.IoFile
 import com.ruyomi.dev.utils.rex.file.impl.RootFile
 import com.ruyomi.dev.utils.rex.file.impl.ShizukuFile
-import com.ruyomi.dev.utils.rex.file.utils.RootUtil
+import com.ruyomi.dev.utils.rex.file.utils.ShellUtil
 import com.ruyomi.dev.utils.rex.file.utils.ShizukuUtil
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
@@ -380,10 +379,10 @@ fun RexFile.openOutputStream() = when (this) {
 private fun RootFile.newInputStream(): InputStream {
     if (!exists()) throw FileNotFoundException("No such file or directory: $path")
     if (isDirectory()) throw FileNotFoundException("Is a directory: $path")
-    Log.d("TAG", "ok first!")
+
     try {
         val fifo = createTempFifo()
-        if (RootUtil.executeCommand("cp -f $path ${fifo.path}").first != 0) throw FileNotFoundException(
+        if (ShellUtil.executeCommand("cp -f $path ${fifo.path}").first != 0) throw FileNotFoundException(
             "cp failed: $path"
         )
         val inputStream = FileInputStream(fifo)
@@ -415,10 +414,10 @@ private fun RootFile.newOutputStream(): OutputStream {
     } else if (!clear()) {
         throw FileNotFoundException("Failed to clear file: $path")
     }
-    Log.d("TAG", "ok first out!")
+
     try {
         val fifo = createTempFifo()
-        if (RootUtil.executeCommand("cp -f ${fifo.path} $path").first != 0) throw FileNotFoundException(
+        if (ShellUtil.executeCommand("cp -f ${fifo.path} $path").first != 0) throw FileNotFoundException(
             "cp failed: $path"
         )
         val outputStream = FileOutputStream(fifo)
@@ -432,14 +431,13 @@ private fun RootFile.newOutputStream(): OutputStream {
                 try {
                     outputStream.close()
                 } finally {
-                    if (RootUtil.executeCommand("mv -f \"${fifo.path}\" \"${path}\"").first != 0) throw FileNotFoundException(
+                    if (ShellUtil.executeCommand("mv -f \"${fifo.path}\" \"${path}\"").first != 0) throw FileNotFoundException(
                         "cp failed: $path"
                     )
                 }
             }
         }
     } catch (e: Exception) {
-        Log.d("TAG newOut", e.toString())
         if (e is FileNotFoundException) throw e
         val cause = e.cause
         if (cause is FileNotFoundException) throw cause
@@ -628,6 +626,15 @@ fun ActivityResultLauncher<Intent>.requestDocPermission(path: String, sub: Boole
 //------ DOCUMENT ------//
 
 //------ SHIZUKU ------//
+
+fun RexFile.chmod(chmod: String): Boolean {
+    return try {
+        (this as ShizukuFile).chmod(chmod)
+    } catch (e: Exception) {
+        false
+    }
+}
+
 fun hasShizukuPermission() = ShizukuUtil.hasPermission()
 
 fun registerShizukuPermission(
@@ -653,9 +660,9 @@ fun unbindShizukuService() = ShizukuUtil.unbindService()
 //------ SHIZUKU ------//
 
 //------ ROOT ------//
-fun hasRootPermission() = RootUtil.hasPermission()
+fun hasRootPermission() = ShellUtil.hasPermission()
 
-fun requestRootPermission() = RootUtil.requestPermission()
+fun requestRootPermission() = ShellUtil.requestPermission()
 //------ ROOT ------//
 
 abstract class RexFile : Comparator<RexFile> {

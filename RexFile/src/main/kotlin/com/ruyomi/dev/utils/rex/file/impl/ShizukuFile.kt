@@ -46,16 +46,17 @@ class ShizukuFile : RexFile {
     override fun list(): Array<String> =
         ShizukuUtil.getShizukuFileService().list(path)?.mapNotNull {
             "${path}${File.separator}$it"
-    }?.toTypedArray() ?: arrayOf()
+        }?.toTypedArray() ?: arrayOf()
 
     override fun list(filter: (String) -> Boolean): Array<String> =
         ShizukuUtil.getShizukuFileService().list(path)?.mapNotNull {
-            it?.takeIf(filter)?.let { name -> "${path}${File.separator}$it" }
+            it?.takeIf(filter)?.let { "${path}${File.separator}$it" }
         }?.toTypedArray() ?: arrayOf()
 
-    override fun listFiles(): Array<RexFile> = ShizukuUtil.getShizukuFileService().list(path)?.map {
-        ShizukuFile("${path}${File.separator}$it")
-    }?.toTypedArray() ?: arrayOf()
+    override fun listFiles(): Array<RexFile> =
+        ShizukuUtil.getShizukuFileService().list(path)?.map {
+            ShizukuFile("${path}${File.separator}$it")
+        }?.toTypedArray() ?: arrayOf()
 
     override fun listFiles(filter: (RexFile) -> Boolean): Array<RexFile> =
         ShizukuUtil.getShizukuFileService().list(path)?.map {

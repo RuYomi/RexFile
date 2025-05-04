@@ -5,7 +5,7 @@ import java.io.DataOutputStream
 import java.io.InputStreamReader
 import java.util.concurrent.locks.ReentrantLock
 
-internal object RootUtil {
+internal object ShellUtil {
 
     private var process: Process? = null
     private var outputStream: DataOutputStream? = null
@@ -63,7 +63,7 @@ internal object RootUtil {
                 }.toIntOrNull() ?: -1
             }
             if (line == null || line == "|<<exitWait|") break
-            output.append(line).append("\n")
+            if (!line.startsWith("|<<exitCode:")) output.append(line).append("\n")
         }
 
         Pair(exitCode, output.toString())

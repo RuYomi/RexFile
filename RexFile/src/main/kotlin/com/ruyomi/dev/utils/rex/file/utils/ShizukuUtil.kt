@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.os.IBinder
+import android.util.Log
 import com.ruyomi.dev.utils.rex.file.BuildConfig
 import com.ruyomi.dev.utils.rex.file.IShizukuFileService
 import com.ruyomi.dev.utils.rex.file.RexFileConfig
@@ -31,7 +32,6 @@ internal object ShizukuUtil {
                 ShizukuFileService::class.java.name
             )
         )
-            .daemon(false)
             .debuggable(BuildConfig.DEBUG)
             .processNameSuffix("file_explorer_service")
             .version(1)
@@ -63,10 +63,17 @@ internal object ShizukuUtil {
 
     fun peekService(): Boolean {
         return try {
-            Shizuku.getVersion() > 11 && Shizuku.peekUserService(
+            (Shizuku.getVersion() > 11 && Shizuku.peekUserService(
                 userServiceArgs,
                 serviceConnection
-            ) != -1
+            ) != -1).apply {
+                Log.d(
+                    "TAG eeee", Shizuku.peekUserService(
+                        userServiceArgs,
+                        serviceConnection
+                    ).toString()
+                )
+            }
         } catch (_: Exception) {
             false
         }

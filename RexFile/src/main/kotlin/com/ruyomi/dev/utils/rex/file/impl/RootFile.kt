@@ -1,7 +1,7 @@
 package com.ruyomi.dev.utils.rex.file.impl
 
 import com.ruyomi.dev.utils.rex.file.RexFile
-import com.ruyomi.dev.utils.rex.file.utils.RootUtil
+import com.ruyomi.dev.utils.rex.file.utils.ShellUtil
 
 import java.io.File
 
@@ -10,10 +10,10 @@ class RootFile : RexFile {
     constructor(path: String) : super(path)
     constructor(file: RexFile, child: String) : super(file, child)
 
-    private fun runCommand(command: String): Boolean = RootUtil.executeCommand(command).first == 0
+    private fun runCommand(command: String): Boolean = ShellUtil.executeCommand(command).first == 0
 
     private fun runCommandWithOutput(command: String): String? {
-        val (exitValue, output) = RootUtil.executeCommand(command)
+        val (exitValue, output) = ShellUtil.executeCommand(command)
         return if (exitValue == 0) output.trim() else null
     }
 
