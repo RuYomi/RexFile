@@ -1,7 +1,7 @@
 # RexFile
 
 ![Static Badge](https://img.shields.io/badge/RexFile-v1.0.6-74A8FF?label=RexFile)
-![Static Badge](https://img.shields.io/badge/LGPL-v3.0-green?label=LGPL-v3.0)
+![Static Badge](https://img.shields.io/badge/LGPL-v2.1-green?label=LGPL-v2.1)
 
 ## 前言
 RexFile是一个十分强大的android-file库。  
@@ -138,6 +138,3 @@ class MainActivity : ComponentActivity() {
 
 详细内容文档还在狂肝ing...  
 欢迎各位给Star，感谢！
-
-## 开源协议
-[LGPL v3.0](https://www.gnu.org/licenses/lgpl-3.0.txt)
