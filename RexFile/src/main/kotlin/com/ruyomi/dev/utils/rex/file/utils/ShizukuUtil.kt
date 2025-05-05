@@ -4,7 +4,6 @@ import android.content.ComponentName
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.os.IBinder
-import android.util.Log
 import com.ruyomi.dev.utils.rex.file.BuildConfig
 import com.ruyomi.dev.utils.rex.file.IShizukuFileService
 import com.ruyomi.dev.utils.rex.file.RexFileConfig
@@ -66,14 +65,7 @@ internal object ShizukuUtil {
             (Shizuku.getVersion() > 11 && Shizuku.peekUserService(
                 userServiceArgs,
                 serviceConnection
-            ) != -1).apply {
-                Log.d(
-                    "TAG eeee", Shizuku.peekUserService(
-                        userServiceArgs,
-                        serviceConnection
-                    ).toString()
-                )
-            }
+            ) != -1)
         } catch (_: Exception) {
             false
         }
